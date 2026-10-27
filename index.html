@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DuoPay Wallet</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f2f5fa;font-family:Arial,sans-serif;color:#18243a}
+header{background:#163b72;color:white;padding:22px;border-radius:0 0 24px 24px}
+header h2{margin:0 0 8px}
+.balance{background:#fff;color:#18243a;padding:20px;border-radius:16px;margin-top:20px}
+.amount{font-size:30px;font-weight:bold;margin:12px 0}
+main{padding:18px}
+.card{background:white;border-radius:16px;padding:18px;margin:14px 0;box-shadow:0 2px 10px #0000000c}
+label{display:block;margin:12px 0 6px}
+input{width:100%;padding:13px;border:1px solid #ccd4e0;border-radius:9px;font-size:16px}
+button{background:#1761cf;color:white;border:0;padding:13px;border-radius:10px;font-size:15px;cursor:pointer}
+.full{width:100%;margin-top:15px}
+.muted{color:#69758a;font-size:13px}
+.item{padding:12px 0;border-bottom:1px solid #eee}
+</style>
+</head>
+<body>
+<header>
+<h2>◈ DuoPay</h2>
+<div>आपका डिजिटल वॉलेट (डेमो)</div>
+<div class="balance">
+<div class="muted">डेमो बैलेंस</div>
+<div class="amount">₹10,000.00</div>
+<div class="muted">यह काल्पनिक राशि है, असली पैसा नहीं।</div>
+</div>
+</header>
+
+<main>
+<div class="card">
+<h3>बैंक खाते में ट्रांसफर</h3>
+<p class="muted">केवल डेमो — कोई वास्तविक भुगतान नहीं होगा।</p>
+<label>खाता धारक का नाम</label>
+<input id="holder" placeholder="नाम लिखें">
+<label>बैंक खाता नंबर</label>
+<input id="account" inputmode="numeric" placeholder="खाता नंबर">
+<label>IFSC कोड</label>
+<input id="ifsc" placeholder="जैसे SBIN0001234">
+<label>ट्रांसफर राशि (₹)</label>
+<input id="amount" type="number" min="1" placeholder="राशि लिखें">
+<button class="full" onclick="transfer()">डेमो ट्रांसफर करें</button>
+<p id="message" role="status"></p>
+</div>
+
+<div class="card">
+<h3>लेनदेन का इतिहास</h3>
+<div id="history" class="muted">अभी कोई लेनदेन नहीं।</div>
+</div>
+
+<div class="card">
+<h3>Amazon Pay Gift Card</h3>
+<p class="muted">Gift Card बैलेंस को इस ऐप से सीधे बैंक में ट्रांसफर नहीं किया जा सकता।</p>
+</div>
+</main>
+
+<script>
+function transfer(){
+ const holder=document.getElementById('holder').value.trim();
+ const account=document.getElementById('account').value.trim();
+ const ifsc=document.getElementById('ifsc').value.trim().toUpperCase();
+ const amount=Number(document.getElementById('amount').value);
+ const msg=document.getElementById('message');
+
+ if(!holder || !/^\d{6,18}$/.test(account) ||
+    !/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc) ||
+    !Number.isFinite(amount) || amount<=0){
+   msg.textContent='कृपया सभी विवरण सही भरें।';
+   msg.style.color='crimson';
+   return;
+ }
+ const entry=document.createElement('div');
+ entry.className='item';
+ entry.textContent='₹'+amount.toFixed(2)+' — डेमो ट्रांसफर; पैसा नहीं भेजा गया।';
+ const history=document.getElementById('history');
+ if(history.textContent==='अभी कोई लेनदेन नहीं।') history.textContent='';
+ history.prepend(entry);
+ msg.textContent='डेमो सफल! कोई वास्तविक बैंक ट्रांसफर नहीं हुआ।';
+ msg.style.color='green';
+}
+</script>
+</body>
+</html>
